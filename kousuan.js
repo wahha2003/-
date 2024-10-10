@@ -1,12 +1,3 @@
-/*
-Quantumult X Rewrite Script
-[rewrite_local]
-^https:\/\/xyks\.yuanfudao\.com\/leo-game-pk\/iphone\/math\/pk\/match.*$ script-response-body https://raw.githubusercontent.com/wahha2003/-/refs/heads/main/kousuan.js
-
-[mitm]
-hostname = xyks.yuanfudao.com
-*/
-
 // 获取服务器响应的原始数据
 let body = $response.body;
 
