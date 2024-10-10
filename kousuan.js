@@ -2,7 +2,7 @@
 Quantumult X Rewrite Script
 [rewrite_local]
 # 拦截URL及其参数的POST请求
-^https:\/\/xyks\.yuanfudao\.com\/leo-game-pk\/iphone\/math\/pk\/match.*$ script-response-body myscript.js
+^https:\/\/xyks\.yuanfudao\.com\/leo-game-pk\/iphone\/math\/pk\/match.*$ script-response-body https://raw.githubusercontent.com/wahha2003/-/refs/heads/main/kousuan.js
 
 [MITM]
 hostname = xyks.yuanfudao.com
