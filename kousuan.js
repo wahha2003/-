@@ -19,10 +19,10 @@ if (jsonBody && jsonBody.examVO && jsonBody.examVO.questions) {
         return (index + 1) + ". [" + q.answers[0] + "]";
     }).join(" ");
     
-    // 发送弹窗，展示答案
-    $notify("题目答案", "", answerMessage);
-    
-    console.log("Answers: " + answerMessage);  // 也可以在日志中输出
+    // 5 秒后发送弹窗，展示答案
+    setTimeout(() => {
+        $notify("题目答案", "", answerMessage);
+    }, 8000);  // 延迟5秒 (5000毫秒)
 }
 
 // 返回原始响应内容
