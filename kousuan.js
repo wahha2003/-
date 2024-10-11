@@ -1,6 +1,5 @@
 let body = $response.body;
 
-// 将响应内容格式化为 JSON 对象
 let jsonBody;
 try {
     jsonBody = JSON.parse(body);
@@ -9,29 +8,37 @@ try {
     $done({body});
 }
 
-// 提取每个题目的答案
 if (jsonBody && jsonBody.examVO && jsonBody.examVO.questions) {
     let questions = jsonBody.examVO.questions;
-    
-    // 构建答案列表，按批次分10个题目一组
-    let answerMessages = [];
-    let batchSize = 10;
-    
-    // 分批次处理答案
-    for (let i = 0; i < questions.length; i += batchSize) {
-        let batch = questions.slice(i, i + batchSize).map((q, index) => {
-            return (i + index + 1) + ". [" + q.answers[0] + "]";
-        }).join(" ");
-        answerMessages.push(batch);
+
+    // 提取每个题目的答案
+    let answers = questions.map(q => q.answers[0]);
+
+    // 按批次处理答案，每批 10 个题目
+    const batchSize = 10;
+    function showAnswersByBatch(index, ans, size, delayMs) {
+        try {
+            let batchAnswers = ans.slice(index, index + size).map((answer, innerIndex) => {
+                return (innerIndex + index + 1) + ". [" + answer + "]";
+            });
+            let answerMessage = batchAnswers.join(" ");
+            $notify.post("题目答案", "", answerMessage);
+            console.log("Answers: " + answerMessage);
+            if (index + size < ans.length) {
+                let startTime = Date.now();
+                while (Date.now() - startTime < delayMs) {
+                    // 等待直到满足延迟时间
+                }
+                showAnswersByBatch(index + size, ans, size, delayMs);
+            }
+        } catch (error) {
+            console.log("Error in showing answers by batch at index " + index + ": " + error);
+        }
     }
 
-    // 按批次延时展示答案，每批间隔8秒
-    answerMessages.forEach((msg, index) => {
-        setTimeout(() => {
-            $notify("题目答案", "第 " + (index + 1) + " 批次", msg);
-        }, 8000 * (index + 1));  // 每批次间隔 8 秒
-    });
+    showAnswersByBatch(0, answers, batchSize, 10000);
+} else {
+    console.log("No valid exam data found.");
 }
 
-// 返回原始响应内容
 $done({body});
